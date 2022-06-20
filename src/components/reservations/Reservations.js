@@ -1,8 +1,12 @@
 import React from 'react'
+import ReservationsList from './ReservationsList'
 
 const Reservations = () => {
+
   return (
-    <div>Reservations</div>
+    <section>
+      <ReservationsList />
+    </section>
   )
 }
 
