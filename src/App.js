@@ -1,8 +1,11 @@
+import Reservations from "./components/reservations/Reservations";
 
 function App() {
   return (
     <>
-      <main className="container-fluid"></main>
+      <main className="container-fluid">
+        <Reservations />
+      </main>
     </>
   );
 }
