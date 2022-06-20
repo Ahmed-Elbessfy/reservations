@@ -111,6 +111,7 @@ const Reservations = () => {
       <FilterReservations
         searchReservations={searchReservations}
         filterReservations={filterReservations}
+        resetReservations={fetchData}
       />
       <ReservationsList
         reservationsList={reserveList}
