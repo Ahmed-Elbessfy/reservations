@@ -52,24 +52,24 @@ const Reservations = () => {
     return formatedDate;
   };
 
-  const filterByArea = (area) =>
-    [...reserveList].filter((reserve) => {
+  const filterByArea = (area, reservations) =>
+    reservations.filter((reserve) => {
       return reserve.area.toLowerCase().replace(/\s/g, "-") === area;
     });
 
-  const filterByShift = (shift) =>
-    [...reserveList].filter((reserve) => reserve.shift.toLowerCase() === shift);
+  const filterByShift = (shift, reservations) =>
+    reservations.filter((reserve) => reserve.shift.toLowerCase() === shift);
 
-  const filterByStatus = (status) =>
-    [...reserveList].filter(
+  const filterByStatus = (status, reservations) =>
+    reservations.filter(
       (reserve) => reserve.status.toLowerCase().replace(/\s/g, "-") === status
     );
 
-  const filterByDate = (date) =>
+  const filterByDate = (date, reservations) =>
     // sort depending on date field: future or past
     // if future return all dates are today or after
     // if past return all dates are before today
-    [...reserveList].filter((reserve) => {
+    reservations.filter((reserve) => {
       let testedDate = formatDate(reserve.businessDate);
       return date === "future"
         ? new Date(testedDate) > new Date()
@@ -82,24 +82,27 @@ const Reservations = () => {
   const filterReservations = (filters, reservations) => {
     for (let filter in filters) {
       if (filter === "date" && filters[filter].length > 0)
-        reservations = filterByDate(filters[filter]);
+        reservations = filterByDate(filters[filter], reservations);
       if (filter === "status" && filters[filter].length > 0)
-        reservations = filterByStatus(filters[filter]);
+        reservations = filterByStatus(filters[filter], reservations);
       if (filter === "shift" && filters[filter].length > 0)
-        reservations = filterByShift(filters[filter]);
+        reservations = filterByShift(filters[filter], reservations);
       if (filter === "area" && filters[filter].length > 0)
-        reservations = filterByArea(filters[filter]);
+        reservations = filterByArea(filters[filter], reservations);
     }
     return reservations;
   };
 
   // perform both filter and search in the same time
-  const searchAndFilterReservations = (inputs) => {
+  const searchAndFilterReservations = async (inputs) => {
     // get new copy of the reservations list to apply filter and search on and update reservations
-    let modifiedReservations = [...reserveList];
+    let modifiedReservations = await fetchData();
     // apply filters only if there are any
     if (inputs["filters"] !== {})
-      modifiedReservations = filterReservations(inputs["filters"], reserveList);
+      modifiedReservations = filterReservations(
+        inputs["filters"],
+        modifiedReservations
+      );
     // apply search only if user input
     if (inputs["search"].length > 0)
       modifiedReservations = searchReservations(
@@ -114,12 +117,17 @@ const Reservations = () => {
   const fetchData = async () => {
     const data = await fetch("./assets/data.json");
     const result = await data.json();
-    setReserveList(result.reservations);
+    return result.reservations;
+    // setReserveList(result.reservations);
   };
 
   // fetching data
   useEffect(() => {
-    fetchData();
+    const getData = async () => {
+      const data = await fetchData();
+      setReserveList(data);
+    };
+    getData();
   }, []);
 
   return (
