@@ -18,7 +18,7 @@ const Reservations = () => {
 
   return (
     <section>
-      <ReservationsList />
+      <ReservationsList reservationsList={reserveList} />
     </section>
   );
 };
