@@ -1,19 +1,31 @@
 import React from "react";
 import ReservationItem from "./ReservationItem";
 
-const ReservationsList = ({ reservationsList }) => {
+const ReservationsList = ({ reservationsList, sortReservations }) => {
   return (
     <table className="table table-striped">
       <thead>
         <tr>
-          <th scope="col">id</th>
+          <th
+            scope="col"
+            onClick={() => sortReservations("id")}
+            className="cursor-pointer"
+          >
+            id
+          </th>
           <th scope="col">Business Date</th>
           <th scope="col">Status</th>
           <th scope="col">Shift</th>
           <th scope="col">Start Time</th>
           <th scope="col">End Time</th>
           <th scope="col">Quantity</th>
-          <th scope="col">Customer</th>
+          <th
+            scope="col"
+            onClick={() => sortReservations("customer")}
+            className="cursor-pointer"
+          >
+            Customer
+          </th>
           <th scope="col">Area</th>
           <th scope="col">Guest Notes</th>
         </tr>
