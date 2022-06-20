@@ -33,13 +33,13 @@ const Reservations = () => {
   };
 
   // Search Methods //
-  const searchReservations = (name) => {
-    let searchResults = [...reserveList].filter(
+  // Search locally in the function and return result to allow both search & filters in the same time
+  const searchReservations = (name, reservations) => {
+    return reservations.filter(
       (reserve) =>
         reserve.customer.firstName.toLowerCase().includes(name.toLowerCase()) ||
         reserve.customer.lastName.toLowerCase().includes(name.toLowerCase())
     );
-    setReserveList(searchResults);
   };
 
   // Filter Methods //
@@ -78,20 +78,36 @@ const Reservations = () => {
 
   // Main Filter
   // assume availability of multiple filters
-  const filterReservations = (filters) => {
-    let filteredList = [...reserveList];
+  // Filter locally in the function and return result to allow both search & filters in the same time
+  const filterReservations = (filters, reservations) => {
     for (let filter in filters) {
       if (filter === "date" && filters[filter].length > 0)
-        filteredList = filterByDate(filters[filter]);
+        reservations = filterByDate(filters[filter]);
       if (filter === "status" && filters[filter].length > 0)
-        filteredList = filterByStatus(filters[filter]);
+        reservations = filterByStatus(filters[filter]);
       if (filter === "shift" && filters[filter].length > 0)
-        filteredList = filterByShift(filters[filter]);
+        reservations = filterByShift(filters[filter]);
       if (filter === "area" && filters[filter].length > 0)
-        filteredList = filterByArea(filters[filter]);
+        reservations = filterByArea(filters[filter]);
     }
+    return reservations;
+  };
 
-    setReserveList(filteredList);
+  // perform both filter and search in the same time
+  const searchAndFilterReservations = (inputs) => {
+    // get new copy of the reservations list to apply filter and search on and update reservations
+    let modifiedReservations = [...reserveList];
+    // apply filters only if there are any
+    if (inputs["filters"] !== {})
+      modifiedReservations = filterReservations(inputs["filters"], reserveList);
+    // apply search only if user input
+    if (inputs["search"].length > 0)
+      modifiedReservations = searchReservations(
+        inputs["search"],
+        modifiedReservations
+      );
+    // set reservations to the modified reservations after searching anf filter them
+    setReserveList(modifiedReservations);
   };
 
   // fetching reservations data
@@ -109,9 +125,8 @@ const Reservations = () => {
   return (
     <section>
       <FilterReservations
-        searchReservations={searchReservations}
-        filterReservations={filterReservations}
         resetReservations={fetchData}
+        searchAndFilterReservations={searchAndFilterReservations}
       />
       <ReservationsList
         reservationsList={reserveList}

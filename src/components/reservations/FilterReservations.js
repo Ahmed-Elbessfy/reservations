@@ -1,9 +1,8 @@
 import { useState } from "react";
 
 const FilterReservations = ({
-  searchReservations,
-  filterReservations,
   resetReservations,
+  searchAndFilterReservations,
 }) => {
   // ************* Component State *************** //
   const [search, setSearch] = useState("");
@@ -39,16 +38,17 @@ const FilterReservations = ({
     // tp prevent default behavior of reload
     e.preventDefault();
 
-    // pass search value
-    searchReservations(search);
     // empty search field
     setSearch("");
-    // pass filters
-    filterReservations({
-      date: date,
-      status: status,
-      shift: shift,
-      area: area,
+    // pass filters && search
+    searchAndFilterReservations({
+      search,
+      filters: {
+        date: date,
+        status: status,
+        shift: shift,
+        area: area,
+      },
     });
   };
 
