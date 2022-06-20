@@ -1,4 +1,5 @@
 import React from "react";
+import ReservationItem from "./ReservationItem";
 
 const ReservationsList = ({ reservationsList }) => {
   return (
@@ -19,7 +20,9 @@ const ReservationsList = ({ reservationsList }) => {
       </thead>
       <tbody>
         {reservationsList.map((reservation) => {
-          return <div>reserve</div>;
+          return (
+            <ReservationItem key={reservation.id} reservation={reservation} />
+          );
         })}
       </tbody>
     </table>
