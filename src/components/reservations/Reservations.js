@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import FilterReservations from "./FilterReservations";
 import ReservationsList from "./ReservationsList";
 
 const Reservations = () => {
@@ -31,6 +32,16 @@ const Reservations = () => {
     setReserveList(sortedList);
   };
 
+  // Search Methods
+  const searchReservations = (name) => {
+    let searchResults = [...reserveList].filter(
+      (reserve) =>
+        reserve.customer.firstName.toLowerCase().includes(name.toLowerCase()) ||
+        reserve.customer.lastName.toLowerCase().includes(name.toLowerCase())
+    );
+    setReserveList(searchResults);
+  };
+
   // fetching reservations data
   const fetchData = async () => {
     const data = await fetch("./assets/data.json");
@@ -45,6 +56,7 @@ const Reservations = () => {
 
   return (
     <section>
+      <FilterReservations searchReservations={searchReservations} />
       <ReservationsList
         reservationsList={reserveList}
         sortReservations={sortReservations}
