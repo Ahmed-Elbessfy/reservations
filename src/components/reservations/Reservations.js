@@ -120,6 +120,13 @@ const Reservations = () => {
     return result.reservations;
   };
 
+  // Reset Method //
+  const resetReservations = async () => {
+    // retrieve reservations from data base
+    const originalReservations = await fetchData();
+    setReserveList(originalReservations);
+  };
+
   // fetching data
   useEffect(() => {
     const getData = async () => {
@@ -132,7 +139,7 @@ const Reservations = () => {
   return (
     <section>
       <FilterReservations
-        resetReservations={fetchData}
+        resetReservations={resetReservations}
         searchAndFilterReservations={searchAndFilterReservations}
       />
       <ReservationsList
