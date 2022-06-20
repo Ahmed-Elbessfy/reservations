@@ -32,7 +32,7 @@ const Reservations = () => {
     setReserveList(sortedList);
   };
 
-  // Search Methods
+  // Search Methods //
   const searchReservations = (name) => {
     let searchResults = [...reserveList].filter(
       (reserve) =>
@@ -40,6 +40,58 @@ const Reservations = () => {
         reserve.customer.lastName.toLowerCase().includes(name.toLowerCase())
     );
     setReserveList(searchResults);
+  };
+
+  // Filter Methods //
+  // Helpers
+  // format dates : reformat dates to be available for comparison
+  const formatDate = (date) => {
+    let formatedDate = date.split(".");
+    // swap since date in the date base are (month, day,year) and Date method accepts (day, month, year)
+    [formatedDate[1], formatedDate[0]] = [formatedDate[0], formatedDate[1]];
+    return formatedDate;
+  };
+
+  const filterByArea = (area) =>
+    [...reserveList].filter((reserve) => {
+      return reserve.area.toLowerCase().replace(/\s/g, "-") === area;
+    });
+
+  const filterByShift = (shift) =>
+    [...reserveList].filter((reserve) => reserve.shift.toLowerCase() === shift);
+
+  const filterByStatus = (status) =>
+    [...reserveList].filter(
+      (reserve) => reserve.status.toLowerCase().replace(/\s/g, "-") === status
+    );
+
+  const filterByDate = (date) =>
+    // sort depending on date field: future or past
+    // if future return all dates are today or after
+    // if past return all dates are before today
+    [...reserveList].filter((reserve) => {
+      let testedDate = formatDate(reserve.businessDate);
+      return date === "future"
+        ? new Date(testedDate) > new Date()
+        : new Date(testedDate) <= new Date();
+    });
+
+  // Main Filter
+  // assume availability of multiple filters
+  const filterReservations = (filters) => {
+    let filteredList = [...reserveList];
+    for (let filter in filters) {
+      if (filter === "date" && filters[filter].length > 0)
+        filteredList = filterByDate(filters[filter]);
+      if (filter === "status" && filters[filter].length > 0)
+        filteredList = filterByStatus(filters[filter]);
+      if (filter === "shift" && filters[filter].length > 0)
+        filteredList = filterByShift(filters[filter]);
+      if (filter === "area" && filters[filter].length > 0)
+        filteredList = filterByArea(filters[filter]);
+    }
+
+    setReserveList(filteredList);
   };
 
   // fetching reservations data
@@ -56,7 +108,10 @@ const Reservations = () => {
 
   return (
     <section>
-      <FilterReservations searchReservations={searchReservations} />
+      <FilterReservations
+        searchReservations={searchReservations}
+        filterReservations={filterReservations}
+      />
       <ReservationsList
         reservationsList={reserveList}
         sortReservations={sortReservations}

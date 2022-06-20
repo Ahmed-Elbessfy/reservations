@@ -1,12 +1,34 @@
 import { useState } from "react";
 
-const FilterReservations = ({ searchReservations }) => {
+const FilterReservations = ({ searchReservations, filterReservations }) => {
   // ************* Component State *************** //
   const [search, setSearch] = useState("");
+  const [date, setDate] = useState("");
+  const [status, setStatus] = useState("");
+  const [shift, setShift] = useState("");
+  const [area, setArea] = useState("");
 
   // ************* Component Methods *************** //
   // Search method
   const handleSearch = (e) => setSearch(e.target.value);
+
+  // Filter method
+  const handleFilter = (e) => {
+    switch (e.target.name) {
+      case "date":
+        setDate(e.target.value);
+        break;
+      case "status":
+        setStatus(e.target.value);
+        break;
+      case "shift":
+        setShift(e.target.value);
+        break;
+      // area
+      default:
+        setArea(e.target.value);
+    }
+  };
 
   // handle submit should pass up search & filter inputs
   const handleSubmit = (e) => {
@@ -17,6 +39,13 @@ const FilterReservations = ({ searchReservations }) => {
     searchReservations(search);
     // empty search field
     setSearch("");
+    // pass filters
+    filterReservations({
+      date: date,
+      status: status,
+      shift: shift,
+      area: area,
+    });
   };
 
   return (
@@ -31,6 +60,69 @@ const FilterReservations = ({ searchReservations }) => {
             value={search}
             onChange={handleSearch}
           ></input>
+        </div>
+        {/* date filter  */}
+        <div className="col-lg-3">
+          <select
+            value={date}
+            name="date"
+            className="form-select"
+            onChange={handleFilter}
+          >
+            <option disabled value="">
+              Date
+            </option>
+            <option value="past">Past Dates</option>
+            <option value="future">Future Dates</option>
+          </select>
+        </div>
+        {/* status filter  */}
+        <div className="col-lg-3">
+          <select
+            value={status}
+            name="status"
+            className="form-select"
+            onChange={handleFilter}
+          >
+            <option disabled value="">
+              Status
+            </option>
+            <option value="confirmed">Confirmed</option>
+            <option value="not-confirmed">Not Confirmed</option>
+            <option value="seated">Seated</option>
+            <option value="checked-out">Checked Out</option>
+          </select>
+        </div>
+        {/* date filter  */}
+        <div className="col-lg-3">
+          <select
+            value={shift}
+            name="shift"
+            className="form-select"
+            onChange={handleFilter}
+          >
+            <option disabled value="">
+              Shift
+            </option>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+          </select>
+        </div>
+        {/* Area filter  */}
+        <div className="col-lg-3">
+          <select
+            value={area}
+            name="area"
+            className="form-select"
+            onChange={handleFilter}
+          >
+            <option disabled value="">
+              Area
+            </option>
+            <option value="bar">Bar</option>
+            <option value="main-room">Main Room</option>
+          </select>
         </div>
         {/* submit search and filter */}
         <div className="col-lg-6 offset-lg-6 d-flex justify-content-end">
