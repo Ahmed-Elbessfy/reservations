@@ -118,7 +118,6 @@ const Reservations = () => {
     const data = await fetch("./assets/data.json");
     const result = await data.json();
     return result.reservations;
-    // setReserveList(result.reservations);
   };
 
   // fetching data

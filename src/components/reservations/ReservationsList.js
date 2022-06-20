@@ -2,7 +2,7 @@ import React from "react";
 import ReservationItem from "./ReservationItem";
 
 const ReservationsList = ({ reservationsList, sortReservations }) => {
-  return (
+  return reservationsList.length > 0 ? (
     <table className="table table-striped">
       <thead>
         <tr>
@@ -38,6 +38,11 @@ const ReservationsList = ({ reservationsList, sortReservations }) => {
         })}
       </tbody>
     </table>
+  ) : (
+    <p className="h1 text-center mt-5">
+      Sorry! No matching reservations. Please click "RESET" button to show
+      reservations again
+    </p>
   );
 };
 
