@@ -10,3 +10,11 @@ Technologies
 - CSS
 - JAVASCRIPT
 - REACT
+
+To run project:
+- open terminal
+- type ``` git clone https://github.com/Ahmed-Elbessfy/reservations.git ```
+- type ``` cd reservations ```
+- type ``` npm i ```
+- type ``` npm start ```
+- Default browser will open localhost at port 3000 : http://localhost:3000/
